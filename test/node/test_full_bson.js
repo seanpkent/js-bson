@@ -612,6 +612,36 @@ describe('Full BSON', function() {
   /**
    * @ignore
    */
+  it('Should Correctly Serialize and Deserialize ArrayBuffer with promoteArrayBuffers option', function(done) {
+    var doc = { doc: Buffer.from('123451234512345') };
+    var serialized_data = BSON.serialize(doc);
+
+    var options = { promoteArrayBuffers: true };
+    expect('123451234512345').to.equal(
+      Buffer.from(BSON.deserialize(serialized_data, options).doc).toString('ascii')
+    );
+
+    done();
+  });
+
+  /**
+   * @ignore
+   */
+  it('Should Correctly Serialize and Deserialize Uint8Array with promoteArrayBuffers option', function(done) {
+    var doc = { doc: new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]) };
+    var serialized_data = BSON.serialize(doc);
+
+    var options = { promoteArrayBuffers: true };
+    expect(new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8])).to.deep.equal(
+      BSON.deserialize(serialized_data, options).doc
+    );
+
+    done();
+  });
+
+  /**
+   * @ignore
+   */
   it('Should Correctly encode Empty Hash', function(done) {
     var test_code = {};
     var serialized_data = BSON.serialize(test_code);
